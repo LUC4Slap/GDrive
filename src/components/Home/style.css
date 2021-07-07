@@ -80,9 +80,9 @@
 }
 
 .main__btnFileSelect svg {
-  font-size: 20px;
+  font-size: 25px;
   position: relative;
-  top: 4px;
+  top: 6px;
   right: 5px;
 }
 
@@ -105,6 +105,7 @@
   position: relative;
   top: -5px;
   color: rgb(3, 169, 252);
+  font-weight: bold;
 }
 
 .mainTopoText {
