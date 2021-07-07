@@ -1,0 +1,115 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 8px;
+  border-bottom: 1px solid #ccc;
+  align-items: center;
+}
+
+.header__logo img {
+  width: 70px;
+}
+
+.header__user img {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  border: 1px solid tomato;
+  /* linear-gradient(to right, red, purple) */
+}
+
+.header__pesquisa {
+  width: 60%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.header__pesquisa svg {
+  font-size: 30px;
+  position: relative;
+  cursor: pointer;
+}
+
+.header__pesquisa svg:nth-child(1) {
+  display: flex;
+  left: 40px;
+}
+
+.header__pesquisa svg:nth-child(3) {
+  display: flex;
+  right: 40px;
+}
+
+.header__pesquisa input[type="text"] {
+  width: 100%;
+  padding-left: 50px;
+  height: 40px;
+  border-radius: 8px;
+  border: 0;
+  background-color: rgb(230, 230, 230);
+  font-weight: bold;
+}
+
+.main {
+  width: 100%;
+  display: flex;
+}
+
+.main__sidebar {
+  width: 300px;
+  padding: 40px 10px;
+}
+
+.main__content {
+  width: calc(100% - 300px);
+  padding: 10px;
+}
+
+.header-input {
+  display: none;
+}
+
+.main__btnFileSelect {
+  cursor: pointer;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  color: #333;
+  font-weight: bold;
+}
+
+.main__btnFileSelect svg {
+  font-size: 20px;
+  position: relative;
+  top: 4px;
+  right: 5px;
+}
+
+.main__folderMeuDriver {
+  margin-top: 30px;
+  background-color: rgba(3, 169, 252, 0.2);
+  max-width: 300px;
+  padding: 8px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.main__folderMeuDriver svg {
+  font-size: 23px;
+  color: rgb(3, 169, 252);
+}
+
+.main__folderMeuDriver span {
+  padding-left: 30px;
+  position: relative;
+  top: -5px;
+  color: rgb(3, 169, 252);
+}
+
+.mainTopoText {
+  padding: 8px 0;
+  font-weight: normal;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+}

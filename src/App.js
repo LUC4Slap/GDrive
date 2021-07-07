@@ -1,23 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Home from "./components/Home";
+import { provider, auth } from "./database/firebase";
+import Login from "./components/Login";
 
 function App() {
+  const [login, setLogin] = useState(null);
+
+  useEffect(() => {
+    //Sistema de login persistente
+    auth.onAuthStateChanged((val) => {
+      if (val) {
+        setLogin({
+          email: val.email,
+          nome: val.displayName,
+          imagem: val.photoURL,
+        });
+      } else {
+        setLogin(null);
+      }
+    });
+  }, []);
+
+  const handlelogin = (e) => {
+    e.preventDefault();
+    auth.signInWithPopup(provider).then((result) => {
+      if (result) {
+        console.log(result);
+        setLogin(result.user);
+      }
+    });
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {login ? (
+        <Router>
+          <Switch>
+            <Route exact path="/"></Route>
+
+            <Route exact path="/home">
+              <Home login={login} />
+            </Route>
+          </Switch>
+        </Router>
+      ) : (
+        <Login handlelogin={handlelogin} />
+      )}
     </div>
   );
 }
