@@ -16,6 +16,7 @@ function App() {
           email: val.email,
           nome: val.displayName,
           imagem: val.photoURL,
+          uid: val.uid,
         });
       } else {
         setLogin(null);
@@ -38,7 +39,6 @@ function App() {
         <Router>
           <Switch>
             <Route exact path="/"></Route>
-
             <Route exact path="/home">
               <Home login={login} />
             </Route>
