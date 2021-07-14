@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../../assets/icon.png";
 import { FcSearch, FcSettings, FcPlus } from "react-icons/fc";
 import { AiFillFolder } from "react-icons/ai";
@@ -7,14 +7,29 @@ import { db, storage } from "../../database/firebase";
 import "./style.css";
 
 const Home = ({ login }) => {
+  const [progress, setProgress] = useState(0);
+  const [arquivos, setArquivos] = useState([]);
+
+  useEffect(() => {
+    db.collection("drive")
+      .doc(login.uid)
+      .collection("files")
+      .onSnapshot((snapshot) => {
+        setArquivos(snapshot.docs.map((files) => files.data()));
+      });
+    console.log(arquivos);
+  }, []);
+
   const fazerUploadArquivo = () => {
     let arquivo = document.querySelector("[name=arquivo]").files[0];
     const uploadTesk = storage.ref("drive/" + arquivo.name).put(arquivo);
     uploadTesk.on(
       "state_changed",
       (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 1;
-        console.log(progress);
+        const progressTemp =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log(progressTemp);
+        setProgress(progressTemp);
       },
       function (error) {
         console.log(error);
@@ -27,9 +42,11 @@ const Home = ({ login }) => {
             db.collection("drive").doc(login.uid).collection("files").add({
               arquivoUrl: url,
               tipo_arqivo: arquivo.type,
+              nome: arquivo.name,
             });
           });
         alert("Upload realizado com sucesso");
+        setProgress(0);
       }
     );
   };
@@ -69,11 +86,55 @@ const Home = ({ login }) => {
             <div className="main__folderMeuDriver">
               <AiFillFolder /> <span>Meu Drive</span>
             </div>
+            {progress > 0 ? (
+              <div>
+                <label htmlFor="file">
+                  Dowload progress: {Math.floor(progress)} %
+                </label>
+                <progress id="file" value={progress} max="100">
+                  {progress} %
+                </progress>
+              </div>
+            ) : (
+              <div />
+            )}
           </div>
         </div>
         <div className="main__content">
           <div className="mainTopoText">
             <h2>Meu Drive</h2>
+          </div>
+          <div className="conteudo">
+            {arquivos.map((arquivo) => (
+              <>
+                <div key={arquivo.arquivoUrl} className="conteudo_arquivo">
+                  <a href={arquivo.arquivoUrl}>Nome: {arquivo.nome}</a>
+                  <p>Tipo: {arquivo.tipo_arqivo}</p>
+                  {arquivo.tipo_arqivo === "image/jpeg" ||
+                  arquivo.tipo_arqivo === "image/png" ||
+                  arquivo.tipo_arqivo === "image/jpg" ? (
+                    // eslint-disable-next-line jsx-a11y/alt-text
+                    <img src={arquivo.arquivoUrl} />
+                  ) : null}
+
+                  {arquivo.tipo_arqivo === "video/mp4" ? (
+                    <video width="320" height="240" controls>
+                      <source src={arquivo.arquivoUrl}></source>
+                    </video>
+                  ) : null}
+
+                  {arquivo.tipo_arqivo === "application/pdf" ? (
+                    // eslint-disable-next-line jsx-a11y/iframe-has-title
+                    <iframe
+                      src={arquivo.arquivoUrl}
+                      width="500"
+                      height="300"
+                    ></iframe>
+                  ) : null}
+                </div>
+                <hr />
+              </>
+            ))}
           </div>
         </div>
       </div>
