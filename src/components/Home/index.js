@@ -3,12 +3,15 @@ import Logo from "../../assets/icon.png";
 import { FcSearch, FcSettings, FcPlus } from "react-icons/fc";
 import { AiFillFolder } from "react-icons/ai";
 import { db, storage } from "../../database/firebase";
+import Switch from "react-switch";
+import { BsMoon, BsSun } from "react-icons/bs";
 
 import "./style.css";
 
 const Home = ({ login }) => {
   const [progress, setProgress] = useState(0);
   const [arquivos, setArquivos] = useState([]);
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     db.collection("drive")
@@ -19,6 +22,18 @@ const Home = ({ login }) => {
       });
     console.log(arquivos);
   }, []);
+
+  const handleCheck = (val) => {
+    setChecked(val);
+    let body = document.querySelector("body");
+    if (!checked) {
+      body.style.background = "#000";
+      body.style.color = "#fff";
+    } else {
+      body.style.background = "#fff";
+      body.style.color = "#000";
+    }
+  };
 
   const fazerUploadArquivo = () => {
     let arquivo = document.querySelector("[name=arquivo]").files[0];
@@ -53,6 +68,15 @@ const Home = ({ login }) => {
 
   return (
     <div className="home">
+      <div className="switch">
+        <Switch
+          onChange={(val) => handleCheck(val)}
+          checked={checked}
+          uncheckedIcon={<BsMoon />}
+          checkedIcon={<BsSun />}
+          onColor="#7FFFD4"
+        />
+      </div>
       <div className="header">
         <div className="header__logo">
           <img src={Logo} />
